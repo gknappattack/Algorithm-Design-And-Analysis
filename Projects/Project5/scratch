@@ -1,0 +1,74 @@
+# Get the index of the starting city based on location in
+        starting_city = current_solution[len(current_solution) - 1]
+
+        # Get the index of the starting city in the matrix to get the correct row from it
+        starting_city_index = cluster.index(starting_city)
+
+        # Extract the row of values from the full matrix to check paths from the current city
+        distances_from_starting_city = matrix[starting_city_index]
+
+        # Create a priority queue to store path costs and column indicies
+        prio_q = PriorityQueue()
+
+        for column_index, city in enumerate(distances_from_starting_city):
+            current_cost = distances_from_starting_city[column_index]
+
+            next_city = cluster[column_index]
+
+            # Only add cities to the queue if they are not part of the solution yet
+            if next_city not in current_solution:
+                prio_q.put((current_cost, column_index))
+
+        while True:
+            if prio_q.empty():
+                return None
+
+            # Get the columm of the path with the lowest value
+            min_column_index = prio_q.get()[1]
+
+            # Get the number of the city from the cluster at the column index
+            next_city = cluster[min_column_index]
+
+            # The next city is part of a connection, don't solve for it
+            if next_city in cluster_connections:
+                # Unless the connection city is the only city left
+                if prio_q.empty():
+                    return next_city
+            else:
+                return next_city
+
+
+
+
+
+
+
+
+
+
+# Iterate for each cluster
+            cluster_connections = []
+
+            for cluster_index in range(len(city_clusters)):
+                # Get the current and next clusters to compare
+                starting_cluster = city_clusters[cluster_index % len(city_clusters)]
+                destination_cluster = city_clusters[(cluster_index + 1) % len(city_clusters)]
+
+                # Create a priority queue to store edges between clusters
+                connections_prio_queue = PriorityQueue()
+
+                # Get the values of all paths between all cities in both clusters, save to prio queue
+                for starting_city in starting_cluster:
+                    for destination_city in destination_cluster:
+                        path_cost = starting_state.costmatrix[starting_city][destination_city]
+                        connections_prio_queue.put((path_cost, starting_city, destination_city))
+
+                while True:
+                    min_connection = connections_prio_queue.get()
+
+                    # Each city can only be in a connection once to have a valid path
+                    if min_connection[1] not in cluster_connections and min_connection[2] not in cluster_connections:
+                        break
+
+                cluster_connections.append(min_connection[1])
+                cluster_connections.append(min_connection[2])

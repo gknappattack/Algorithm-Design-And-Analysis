@@ -1,0 +1,150 @@
+1) Sort Points and get right set and left set
+sortedarray = mergesort(arr) O(n log n) time complexity
+
+
+
+2) Get Convex Hull 
+
+
+a. Get points of convex hull of two sub arrays
+
+
+1. Divide array into 2 subarrays
+S1 = S[0:n/2]
+S2 = S[n/2 + 1:n-1]
+
+
+2. Recursively divide arrays into small tasks, find convex hull of small array and return to divide and conquer.
+
+
+DNCHull(S1) O(log n) time
+if len(S1) <= 5 then
+return S1
+Sleft = DNCHull(S1[0:n/2])
+Sright = DNCHull(S1[n/2 + 1:n-1])
+HullL = BruteForce(Sleft)
+HullR = BruteForce(SRight)
+RecursiveHull = combine(Sleft + SRight)
+return RecursiveHull
+
+BruteForce(P) O(n^3)
+create empty array of points
+for p1,p2 in P 
+find line y = mx + b that contains p1 and p2
+count = 0
+for q in P
+if yq > mxq+b then
+count ++
+if count = size of P or count = 0 then
+add p1 and p2 to hull
+return hull
+
+
+3. Repeat until convex hull for full subarray is found
+
+CHLeft = DNCHull(S1)
+CHRight = DNCHull(S2)
+
+
+
+b. Find tangent lines
+
+1. Get furthers right X point in S1 and further left point in S2
+
+GetRightXValue(S1) O(n)
+max = px[0]
+for p in S1
+if px[i] > max then
+max = px[i]
+
+return max
+
+GetLeftXValue(S2) O(n)
+min = px[0]
+for p in S2
+if px[i] < min then
+min = px[i]
+
+return min
+LeftX = GetXValue(S1)
+
+
+2. Find upper tangent line
+
+FindUpperTangent(S1,S2)
+right = GetRightXValue(S1)
+left = GetLeftXValue(S2)
+temp = line(right,left)
+done = 0
+while done == 0
+done = 1
+//Calculate slope of line
+while temp is not upper tangent of left side
+r = left counter clockwise neighbor
+temp = line(r,right)
+if slope is increasing then
+(left,right) is upper tangent for left side
+else
+left = r
+done = 0
+while temp is not upper tangent of left side
+r = right clockwise neighbor
+temp = line(r,left)
+if slope is increasing then
+(right,left) is upper tangent for left side
+else
+right = r
+done = 0
+
+
+3. Find lower tangent line
+
+FindLowerTangent(S1,S2)
+right = GetRightXValue(S1)
+left = GetLeftXValue(S2)
+temp = line(right,left)
+done = 0
+while done == 0
+done = 1
+//Calculate slope of line
+while temp is not upper tangent of left side
+r = left clockwise neighbor
+temp = line(r,right)
+if slope is increasing then
+(left,right) is upper tangent for left side
+else
+left = r
+done = 0
+while temp is not upper tangent of left side
+r = right counter clockwise neighbor
+temp = line(r,left)
+if slope is increasing then
+(right,left) is upper tangent for left side
+else
+right = r
+done = 0
+
+3. Remove inner points from convex hull set of points
+
+UpperTangentLine = FindUpperTangent(S1,S2)
+LowerTangentLine = FindLowerTangent(S1,S2)
+UpperTangentPointL = UpperTangentLine[0]
+UpperTangentPointR = UpperTangentLine[1]
+LowerTangentPointL = LowerTangentLine[0]
+LowerTangentPointR = LowerTangentLine[1]
+
+for p in S1
+if px[i] > UpperTangentPointLX && LowerTangentPointLX
+remove from hullarray
+
+for p in S2
+if px[i] < UpperTangentPointRX && LowerTangentPointRX
+remove from hullarray
+
+
+3) Send points to GUI to draw
+draw_hull(hullarray)
+
+
+Bonus: Draw points recursively throughout process....
+Nah
