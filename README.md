@@ -12,3 +12,5 @@ Coursework and Projects for BYU CS 312 Algorithm Design and Analysis.
 - The student can prove the correctness of a subset of the algorithms considered in the course.
 
 - The student can independently implement selected algorithms in the context of motivating applications using Python.
+
+(From the BYU Course Catalog: https://catalog.byu.edu/physical-and-mathematical-sciences/computer-science/algorithm-design-and-analysis)
